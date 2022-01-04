@@ -1,0 +1,27 @@
+{
+    "name": "wipkip/netex",
+    "description": "NeTEx PHP parser library",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Wipkip\\NeTEx\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ruben Seyferth",
+            "email": "ruben@wipkip.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "prewk/xml-string-streamer": "^1.2",
+        "ext-xml": "*",
+        "ext-sqlite3": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9",
+        "codedungeon/phpunit-result-printer": "^0.31.0",
+        "symfony/var-dumper": "^5.4"
+    }
+}

@@ -1,0 +1,21 @@
+version: "3.7"
+services:
+  # PHP CLI
+  app:
+    container_name: netex-app
+    build:
+      dockerfile: ./docker/app/Dockerfile
+      args:
+        user: netex
+        uid: 1000
+    volumes:
+      - ./docker/etc/php/php.ini:/usr/local/etc/php/php.ini
+      - ./docker/etc/php/php-cli.ini:/usr/local/etc/php/php-cli.ini
+      - ./docker/.zshrc:/home/laravel/.zshrc
+      - ./:/var/www
+    networks:
+      - netex
+
+networks:
+  netex:
+    driver: bridge
