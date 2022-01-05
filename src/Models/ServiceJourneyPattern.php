@@ -7,11 +7,12 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  string|null  $name
- * @property-read  mixed  $route
- * @property-read  string|null  $directionType
- * @property-read  mixed  $destinationDisplay
- * @property-read  mixed  $pointsInSequence
+ * @property-read  string|null  $name  
+ * @property-read  string|null  $name_lang
+ * @property-read  Route  $route  
+ * @property-read  string|null  $directionType  
+ * @property-read  DestinationDisplay  $destinationDisplay  
+ * @property-read  mixed  $pointsInSequence  
  */
  
 class ServiceJourneyPattern extends Record {}

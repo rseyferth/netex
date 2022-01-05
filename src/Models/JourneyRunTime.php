@@ -7,8 +7,8 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  mixed  $timingLink
- * @property-read  string  $runTime
+ * @property-read  TimingLink  $timingLink  
+ * @property-read  string  $runTime  
  */
  
 class JourneyRunTime extends Record {}

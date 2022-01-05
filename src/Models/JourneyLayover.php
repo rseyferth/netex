@@ -7,9 +7,9 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  string  $layover
- * @property-read  mixed|null  $scheduledStopPoint
- * @property-read  mixed|null  $timingPoint
+ * @property-read  string  $layover  
+ * @property-read  ScheduledStopPoint|null  $scheduledStopPoint  
+ * @property-read  TimingPoint|null  $timingPoint  
  */
  
 class JourneyLayover extends Record {}

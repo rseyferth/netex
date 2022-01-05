@@ -7,8 +7,8 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  string  $vehicleMode
- * @property-read  mixed|null  $transportSubmode
+ * @property-read  string  $vehicleMode  
+ * @property-read  mixed|null  $transportSubmode  
  */
  
 class OperationalContext extends Record {}

@@ -7,9 +7,10 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  mixed  $notice
- * @property-read  mixed  $noticedObject
- * @property-read  string  $order
+ * @property-read  Notice  $notice  
+ * @property-read  mixed  $noticedObject  
+ * @property-read  string  $noticedObject_nameOfRefClass
+ * @property-read  string  $order  
  */
  
 class NoticeAssignment extends Record {}

@@ -7,9 +7,10 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  string|null  $location
- * @property-read  string  $privateCode
- * @property-read  mixed  $typeOfActivation
+ * @property-read  string|null  $location  
+ * @property-read  string  $privateCode  Hier altijd type="KarAddress" gebruiken
+ * @property-read  string  $privateCode_type
+ * @property-read  mixed  $typeOfActivation  
  */
  
 class ActivationPoint extends Record {}

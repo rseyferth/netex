@@ -6,6 +6,7 @@ use GoetasWebservices\XML\XSDReader\Schema\Attribute\Attribute;
 use GoetasWebservices\XML\XSDReader\Schema\Element\Element;
 use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType;
+use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use GoetasWebservices\XML\XSDReader\SchemaReader;
 use Wipkip\NeTEx\Helpers\Arr;
 
@@ -16,9 +17,9 @@ class Schema
     const CustomTypes = [
         'Block' => [
             'journeys' => 'DeadRun|ServiceJourney[]',
-            'dayTypes' => 'DayType[]',
-            'startPoint' => 'GaragePoint',
-            'endPoint' => 'GaragePoint',
+        ],
+        'DeadRun' => [
+            'validityConditions' => 'AvailabilityCondition[]',
         ]
     ];
 
@@ -175,10 +176,28 @@ EOF;
                 // A ref of sorts?
                 elseif (preg_match('/ObjectRefStructure|TypeOfFrameRefStructure/', $type->getName())) {
 
-                    // A reference object. We can't retrieve the type of the reference from the object unfortunately
-                    $result = 'mixed';
-                    $name = preg_replace('/Ref$/', '', $name);
+                    // Can we guess the ref-type based on the name?
+                    $n = preg_replace('/Ref$/', '', $prop->getName());
+                    $t = $this->schema->getType(lcfirst($n));
+                    $multiple = false;
+                    if (!$t) {
+                        $singular = lcfirst(preg_replace('/s$/', '', $n));
+                        $multiple = true;
+                        if ($singular != $n) $t = $this->schema->getType($singular);
+                    }
 
+                    if ($t && $this->isOfModelType($t)) {
+
+                        // Then let's use that.
+                        $result = $n . ($multiple ? '[]' : '');
+
+                    } else {
+                        // A reference object. We can't retrieve the type of the reference from the object unfortunately
+                        $result = 'mixed';
+                    }
+
+                    // No refs in the naming either way
+                    $name = preg_replace('/Ref$/', '', $name);
                 }
 
                 // More complicated stuff...
@@ -194,7 +213,7 @@ EOF;
                         }
 
                         // Record?
-                        if (!$this->elementIsOfModelType($el)) return false;
+                        if (!$this->isOfModelType($el)) return false;
 
                         // Map it.
                         $this->generateModelClass($el, $outputPath);
@@ -236,9 +255,32 @@ EOF;
 
         // Custom one?
         $customType = Arr::get(self::CustomTypes, $el->getName() . ':' . $name);
-        if ($customType) $result = $customType;
+        if ($customType) {
+            $result = $customType;
+            if ($prop->getMin() < 1) $result .= '|null';
+        }
 
-        return ' * @property-read  ' . $result . '  $' . $name . PHP_EOL;
+        // Annotation?
+        $doc = $prop->getDoc();
+        $line = " * @property-read  $result  \$$name  $doc\n";
+
+        // Attributes on it too?
+        if ($prop instanceof Element) {
+            $t = $prop->getType();
+            if (!($t instanceof SimpleType)) {
+
+                $attrs = $prop->getType()->getAttributes();
+                foreach ($attrs as $attr) {
+                    if (preg_match('/^ref|version$/', $attr->getName())) continue;
+                    $attrName = $name . '_' . $attr->getName();
+                    $type = ($attr->getUse() == Attribute::USE_OPTIONAL) ? 'string|null' : 'string';
+                    $line .= " * @property-read  $type  \$$attrName\n";
+                }
+
+            }
+        }
+
+        return $line;
 
     }
 
@@ -270,9 +312,13 @@ EOF;
 
     }
 
-    private function elementIsOfModelType(Element $el)
+    /**
+     * @param Element|Type $el
+     * @return bool
+     */
+    private function isOfModelType($el)
     {
-        $ext = $el->getType()->getExtension();
+        $ext = ($el instanceof Element ? $el->getType() : $el)->getExtension();
         if (!$ext) return false;
         return $ext->getBase()->getName() == 'DataManagedObjectStructure';
     }

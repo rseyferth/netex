@@ -7,8 +7,9 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  string|null  $name
- * @property-read  ResponsibilityRoleAssignment[]  $roles
+ * @property-read  string|null  $name  
+ * @property-read  string|null  $name_lang
+ * @property-read  ResponsibilityRoleAssignment[]  $roles  
  */
  
 class ResponsibilitySet extends Record {}

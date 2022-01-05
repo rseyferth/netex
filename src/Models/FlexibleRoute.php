@@ -7,7 +7,7 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  string  $flexibleRouteType
+ * @property-read  string  $flexibleRouteType  
  */
  
 class FlexibleRoute extends Record {}

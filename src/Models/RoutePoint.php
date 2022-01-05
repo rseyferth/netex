@@ -7,7 +7,7 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  string  $location
+ * @property-read  string  $location  
  */
  
 class RoutePoint extends Record {}

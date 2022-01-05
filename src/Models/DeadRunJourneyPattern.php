@@ -7,8 +7,9 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  string|null  $name
- * @property-read  mixed  $pointsInSequence
+ * @property-read  string|null  $name  
+ * @property-read  string|null  $name_lang
+ * @property-read  mixed  $pointsInSequence  
  */
  
 class DeadRunJourneyPattern extends Record {}

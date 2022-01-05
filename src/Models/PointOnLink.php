@@ -7,8 +7,8 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  string  $distanceFromStart
- * @property-read  mixed  $activationPoint
+ * @property-read  string  $distanceFromStart  
+ * @property-read  ActivationPoint  $activationPoint  
  */
  
 class PointOnLink extends Record {}

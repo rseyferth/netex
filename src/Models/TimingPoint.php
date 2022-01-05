@@ -7,10 +7,11 @@ use Wipkip\NeTEx\Parser\Record;
  * 
  * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
  *
- * @property-read  mixed  $keyList
- * @property-read  string  $name
- * @property-read  string  $location
- * @property-read  PointProjection[]  $projections
+ * @property-read  mixed  $keyList  
+ * @property-read  string  $name  
+ * @property-read  string|null  $name_lang
+ * @property-read  string  $location  
+ * @property-read  PointProjection[]  $projections  
  */
  
 class TimingPoint extends Record {}
