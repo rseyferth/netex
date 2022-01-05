@@ -18,4 +18,13 @@ abstract class Store
     abstract function get(string $id, string $version = 'any', bool $resolveReferences = true): ?Record;
     abstract function count() : int;
 
+
+
+    /**
+     * @return Version[]
+     */
+    abstract function getVersions(): array;
+
+    abstract function getResource(string $version, string $operator, string $resource): ?array;
+
 }

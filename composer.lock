@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9ddfa00caf906544b903ed8fb6584afb",
+    "content-hash": "d9ab4d55be496b0b27d8614b8561e199",
     "packages": [
         {
             "name": "prewk/xml-string-streamer",
@@ -275,6 +275,80 @@
                 }
             ],
             "time": "2020-11-10T18:47:58+00:00"
+        },
+        {
+            "name": "goetas-webservices/xsd-reader",
+            "version": "0.3.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/goetas-webservices/xsd-reader.git",
+                "reference": "abfc58ca4eb1a824e651b6ee9088f157386ee835"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/goetas-webservices/xsd-reader/zipball/abfc58ca4eb1a824e651b6ee9088f157386ee835",
+                "reference": "abfc58ca4eb1a824e651b6ee9088f157386ee835",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.10",
+                "phpstan/phpstan": "^0.12",
+                "phpunit/phpunit": "^7.0|^8.0|^9.0",
+                "sebastian/phpcpd": "^4.0|^5.0|^6.0",
+                "vimeo/psalm": "^3.14"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GoetasWebservices\\CS\\": "./php-cs-fixer/",
+                    "GoetasWebservices\\XML\\XSDReader\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Asmir Mustafic",
+                    "email": "goetas@lignano.it"
+                }
+            ],
+            "description": "Read any XML Schema (XSD) programmatically with PHP",
+            "keywords": [
+                "parser",
+                "php",
+                "xml",
+                "xmlschema",
+                "xsd"
+            ],
+            "support": {
+                "issues": "https://github.com/goetas-webservices/xsd-reader/issues",
+                "source": "https://github.com/goetas-webservices/xsd-reader/tree/0.3.9"
+            },
+            "funding": [
+                {
+                    "url": "https://www.goetas.com/",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/goetas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/goetas",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2021-05-21T18:34:12+00:00"
         },
         {
             "name": "hassankhan/config",
@@ -2761,8 +2835,7 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.1",
-        "ext-xml": "*",
-        "ext-sqlite3": "*"
+        "ext-xml": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.2.0"

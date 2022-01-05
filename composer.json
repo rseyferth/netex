@@ -21,6 +21,7 @@
     "require-dev": {
         "phpunit/phpunit": "^9",
         "codedungeon/phpunit-result-printer": "^0.31.0",
-        "symfony/var-dumper": "^5.4"
+        "symfony/var-dumper": "^5.4",
+        "goetas-webservices/xsd-reader": "^0.3.9"
     }
 }

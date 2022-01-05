@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+
+// Composer
+require __DIR__ . '/vendor/autoload.php';
+
+// Truncate
+$path = __DIR__ . '/src/Models';
+$existing = glob($path . '/*.php');
+foreach ($existing as $file) unlink($file);
+
+// Open XSD
+$netex = new \Wipkip\NeTEx\Reflection\Schema(__DIR__ . '/docs/xsd/netex-nl-geen-constraints.xsd');
+$netex->generateModelClasses($path);

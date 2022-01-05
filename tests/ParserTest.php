@@ -23,6 +23,11 @@ class ParserTest extends TestCase
         $parser->import($store, true);
         $this->assertEquals(8040, $store->count(), 'The number of records was incorrect');
 
+
+        ////////////////////////
+        // Retrieval and refs //
+        ////////////////////////
+
         // Get a record
         $id = 'HTM:Block:129681:607';
         $version = '_2021-03-01';
@@ -56,6 +61,14 @@ class ParserTest extends TestCase
         $this->assertEquals('StopPointInJourneyPattern', $point->elementName);
 
         $this->assertInstanceOf(Record::class, $point->scheduledStopPoint, 'References in nested objects were not properly resolved');
+
+
+
+        /////////////////////////////////
+        // Versions and record casting //
+        /////////////////////////////////
+
+        $versions = $store->getVersions();
 
     }
 
