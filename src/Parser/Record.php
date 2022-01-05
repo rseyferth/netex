@@ -2,6 +2,8 @@
 
 namespace Wipkip\NeTEx\Parser;
 
+use Wipkip\NeTEx\Store\Store;
+
 class Record
 {
 
@@ -27,8 +29,12 @@ class Record
         $this->cursor = [];
     }
 
+    public function __get(string $name) {
+        return $this->data[$name];
+    }
 
-    public function setValue(?string $value)
+
+    public function setValue(?string $value, string $version = 'any')
     {
 
         // Get key from cursor
@@ -48,10 +54,10 @@ class Record
         if (!empty($attrs)) {
 
             // The ref? (e.g. <AuthorityRef ref="..." version="..." />)\
-            if (preg_match('/Ref$/', $dataKey) && array_key_exists('ref', $attrs) && array_key_exists('version', $attrs)) {
+            if (preg_match('/Ref$/', $dataKey) && array_key_exists('ref', $attrs)) {
 
                 // Store ref
-                $this->data[$dataKey] = new Reference($attrs['ref'], $attrs['version']);
+                $this->data[$dataKey] = new Reference($attrs['ref'], $attrs['version'] ?: $version);
 
             } else {
 
@@ -65,6 +71,67 @@ class Record
 
     }
 
+
+    private function resolveReferenceObjects($value, Store $store) {
+
+        // Let's resolve them
+        $isArray = is_array($value);
+        $result = array_map(function($ref) use ($store) {
+
+            // Retrieve the object reference (and keep going if we get another reference)
+            $key = $ref->id;
+            $value = $ref;
+            while ($value instanceof Reference) {
+                $value = $store->get($key, $value->version ?: 'any');
+                if ($value instanceof Reference) $key = $value->id;
+            }
+            return $value;
+        }, is_array($value) ? $value : [$value]);
+
+        return $isArray ? $result : $result[0];
+    }
+
+    public function resolveReferences(Store $store) : Record
+    {
+        // Create a copy
+        $copy = new self($this->elementName, []);
+        foreach ($this->data as $key => $value) {
+
+            // Reference or array of refs?
+            if ($value instanceof Reference || (is_array($value) && count($value) > 0 && $value[0] instanceof Reference)) {
+
+                // Replace key and store the resolved value(s)
+                $key = preg_replace('/Ref(_ref)?$/', '', $key);
+                $copy->data[$key] = $this->resolveReferenceObjects($value, $store);
+
+            }
+
+            // Nested record(s)?
+            elseif ($value instanceof Record || (is_array($value) && count($value) > 0 && $value[0] instanceof Record)) {
+
+                // Resolve them too
+                $isArray = is_array($value);
+                $result = array_map(function($rec) use ($store) {
+                    return $rec->resolveReferences($store);
+                }, is_array($value) ? $value : [$value]);
+
+                $copy->data[$key] = $isArray ? $result : $result[0];
+
+            }
+
+            // Just a value
+            else {
+                $copy->data[$key] = $value;
+            }
+
+        }
+
+        return $copy;
+
+
+    }
+
+
     ////////////////////
     // Public helpers //
     ////////////////////
@@ -74,15 +141,15 @@ class Record
         $this->data[$name] = [];
     }
 
-    public function addRecord($name, Record $record)
+    public function addRecord($name, Record $record, string $version = 'any')
     {
 
         // Is it just a ref?
         if (preg_match('/Ref$/', $record->elementName)
             && array_key_exists('ref', $record->data)
-            && array_key_exists('version', $record->data)) {
+            ) {
 
-            $this->data[$name][] = new Reference($record->data['ref'], $record->data['version'], $record->elementName);
+            $this->data[$name][] = new Reference($record->data['ref'], $record->data['version'] ?: $version, $record->elementName);
 
         } else {
             $this->data[$name][] = $record;
@@ -125,5 +192,12 @@ class Record
         }
         return $result;
     }
+
+    public function getId() {
+        return $this->data['id'];
+    }
+
+
+
 
 }

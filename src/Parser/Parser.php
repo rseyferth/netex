@@ -1,6 +1,7 @@
 <?php namespace Wipkip\NeTEx\Parser;
 
-use Wipkip\NeTEx\Database\NeTExDB;
+use Wipkip\NeTEx\Store\SQLiteStore;
+use Wipkip\NeTEx\Store\Store;
 
 class Parser
 {
@@ -64,9 +65,9 @@ class Parser
 
 
     /**
-     * @var NeTExDB
+     * @var SQLiteStore
      */
-    private $db;
+    private $store;
 
 
 
@@ -96,10 +97,13 @@ class Parser
      */
     private $currentElementData;
 
+    private $path;
+
     public function __construct($path)
     {
 
         // Create parser
+        $this->path = $path;
         $this->fh = fopen($path,'r');
         $this->parser = xml_parser_create();
 
@@ -114,18 +118,31 @@ class Parser
     }
 
 
-    public function import(NeTExDB $db) {
+    public function import(Store $store, $showProgressBar = false) {
 
         // Localize
-        $this->db = $db;
+        $this->store = $store;
+
+        // Progress?
+        $size = filesize($this->path);
+        if ($showProgressBar) fwrite(STDOUT, "Processing XML file of " . round($size / 1024 / 1024) . 'MB' . PHP_EOL);
 
         // Go through the whole tree.
-        while ($data = fread($this->fh, 4096)) {
+        $cursor = 0;
+        $buffer = 4096;
+        while ($data = fread($this->fh, $buffer)) {
+            $cursor += $buffer;
             if (!xml_parse($this->parser, $data, feof($this->fh))) {
                 die(sprintf("XML error: %s at line %d",
                     xml_error_string(xml_get_error_code($this->parser)),
                     xml_get_current_line_number($this->parser)));
             }
+
+            if ($showProgressBar) {
+                fwrite(STDOUT, "\r" . str_repeat(' ', 72) . "\r");
+                fwrite(STDOUT, number_format(($cursor / $size) * 100, 1) . '%');
+            }
+
         }
         xml_parser_free($this->parser);
 
@@ -200,12 +217,12 @@ class Parser
 
                 // Add the record in the array
                 $i = count($this->currentRecords) - 2;
-                $this->currentRecords[$i]->addRecord($arrayName, $rec);
+                $this->currentRecords[$i]->addRecord($arrayName, $rec, $this->currentFrameVersion);
 
             } else {
 
-                // @TODO Store the record.
-                if ($name == 'ServiceJourney') $rec->dd();
+                // Save it
+                $this->store->store($rec, $this->currentFrameVersion);
 
             }
 
@@ -230,7 +247,7 @@ class Parser
         if ($rec) {
 
             // Set it
-            $rec->setValue($this->currentElementData);
+            $rec->setValue($this->currentElementData, $this->currentFrameVersion);
 
             // Close the element
             $rec->popCursor();

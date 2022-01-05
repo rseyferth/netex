@@ -5,8 +5,14 @@ namespace Wipkip\NeTEx\Parser;
 class Reference
 {
 
+    /**
+     * @var string
+     */
     public $id;
 
+    /**
+     * @var null|string
+     */
     public $version;
 
     /**
@@ -14,7 +20,7 @@ class Reference
      */
     public $elementName;
 
-    public function __construct($id, $version, $elementName = null)
+    public function __construct(string $id, ?string $version, ?string $elementName = null)
     {
         $this->id = $id;
         $this->version = $version;
