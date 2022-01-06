@@ -25,7 +25,7 @@ abstract class Store
      */
     abstract function getVersions(): array;
 
-    abstract function getResource(string $version, string $operator, string $resource): ?array;
+    abstract function getResource(string $version, string $resource): ?array;
 
 
 

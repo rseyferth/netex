@@ -71,6 +71,7 @@ class ParserTest extends TestCase
         $versions = $store->getVersions();
         $this->assertCount(1, $versions);
         $version = $versions[0];
+
         $blocks = $version->blocks();
         $this->assertIsArray($blocks);
         $this->assertCount(120, $blocks);
@@ -87,8 +88,27 @@ class ParserTest extends TestCase
         $this->assertInstanceOf(Record::class, $_block->vehicleType);
         $this->assertEquals('VehicleType', $_block->vehicleType->elementName);
 
+        // Get misspelled resource (assignEment vs. assignment)
+        $sas = $version->stopAssignments();
+        $this->assertCount(491, $sas);
+        $sa = $sas[0];
+        $this->assertEquals('PassengerStopAssignment', $sa->elementName);
+
     }
-
-
+//
+//    public function testLargeDataSet () {
+//
+//        // Store in memory
+//        $store = new MemoryStore();
+//
+//        // Create parser
+//        $parser = new Parser(__DIR__ . '/xml/NeTEx_GVB_GVB_20211222T091000_20211222_20220131_prod_test.xml');
+//        $this->assertInstanceOf(Parser::class, $parser);
+//
+//        // Parse it
+//        $parser->import($store, true);
+//
+//    }
+//
 
 }

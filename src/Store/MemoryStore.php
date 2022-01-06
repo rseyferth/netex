@@ -18,27 +18,36 @@ class MemoryStore extends Store
      */
     private $records;
 
+    private $refs;
+
+
     public function __construct($memoryLimit = 2048) {
 
         ini_set('memory_limit', $memoryLimit . 'M');
 
         $this->records = [];
+        $this->refs = [];
     }
 
     function store(Record $rec, string $version = 'any')
     {
-        // Create key
-        $parts = explode(':', $rec->getId());
-        $key = "$version.$parts[0].$parts[1]." . implode(':', array_slice($parts, 2));
-
+        // Store the record nested for quick access: Version -> Element Type -> ID
+        $id = $rec->getId();
+        $key = implode('.', [$version, $rec->elementName, $rec->getId()]);
         Arr::set($this->records, $key, $rec);
+
+        // Store the reference in the map
+        Arr::set($this->refs, $version . '.' . $id, $key);
+
+
     }
 
     function get(string $id, string $version = 'any', bool $resolveReferences = true): ?Record
     {
 
-        // Convert first to parts to dots.
-        $key = $version . '.' . preg_replace('/:/', '.', $id, 2);
+        // Look it up
+        $key = Arr::get($this->refs, "$version.$id");
+        if (!$key) return null;
 
         // Get record
         /**
@@ -67,22 +76,18 @@ class MemoryStore extends Store
     {
         // Version is the first key in the store
         return array_map(function($key) {
-
-            // Get operators in this version (should be only 1)
-            $operators = array_keys($this->records[$key]);
-            if (count($operators) != 1) throw new NeTExException('Found ' . count($operators) . ' operators in a single version: ' . implode(', ', $operators) . '. Only 1 is allowed.');
-
-            return new Version($key, $this, $operators[0]);
+            return new Version($key, $this);
 
         }, array_keys($this->records));
 
     }
 
-    function getResource(string $version, string $operator, string $resource, bool $resolveReferences = false): ?array
+    function getResource(string $version, string $resource, bool $resolveReferences = false): ?array
     {
         // Get the records
         /** @var Record[] $records */
-        $key = implode('.', [$version, $operator, $resource]);
+        $key = implode('.', [$version, $resource]);
+
         $records = Arr::get($this->records, $key);
         if ($records) $records = array_values($records);
         if (!$records || !$resolveReferences) return $records;
