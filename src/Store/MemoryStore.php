@@ -27,17 +27,24 @@ class MemoryStore extends Store
 
     function store(Record $rec, string $version = 'any')
     {
-        Arr::set($this->records, ($version ?: 'any') . ':' . $rec->getId(), $rec);
+        // Create key
+        $parts = explode(':', $rec->getId());
+        $key = "$version.$parts[0].$parts[1]." . implode(':', array_slice($parts, 2));
+
+        Arr::set($this->records, $key, $rec);
     }
 
     function get(string $id, string $version = 'any', bool $resolveReferences = true): ?Record
     {
 
+        // Convert first to parts to dots.
+        $key = $version . '.' . preg_replace('/:/', '.', $id, 2);
+
         // Get record
         /**
          * @var ?Record $rec
          */
-        $rec = Arr::get($this->records, $version . ':' . $id);
+        $rec = Arr::get($this->records, $key);
         if (!$rec || !$resolveReferences) return $rec;
 
         // Resolve it
@@ -71,8 +78,19 @@ class MemoryStore extends Store
 
     }
 
-    function getResource(string $version, string $operator, string $resource): ?array
+    function getResource(string $version, string $operator, string $resource, bool $resolveReferences = false): ?array
     {
-        return Arr::get($this->records, implode(':', [$version, $operator, $resource]));
+        // Get the records
+        /** @var Record[] $records */
+        $key = implode('.', [$version, $operator, $resource]);
+        $records = Arr::get($this->records, $key);
+        if ($records) $records = array_values($records);
+        if (!$records || !$resolveReferences) return $records;
+
+        // Get the records enriched.
+        return array_map(function($rec) {
+            return $rec->resolveReferences($this);
+        }, $records);
+
     }
 }

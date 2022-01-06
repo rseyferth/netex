@@ -69,6 +69,23 @@ class ParserTest extends TestCase
         /////////////////////////////////
 
         $versions = $store->getVersions();
+        $this->assertCount(1, $versions);
+        $version = $versions[0];
+        $blocks = $version->blocks();
+        $this->assertIsArray($blocks);
+        $this->assertCount(120, $blocks);
+
+        $block = $blocks[0];
+        $this->assertInstanceOf(Record::class, $block);
+        $this->assertEquals('Block', $block->elementName);
+        $this->assertNull($block->vehicleType);
+        $this->assertFalse($block->isResolved());
+
+        // Resolve the references
+        $_block = $block->resolveReferences($store);
+        $this->assertTrue($_block->isResolved());
+        $this->assertInstanceOf(Record::class, $_block->vehicleType);
+        $this->assertEquals('VehicleType', $_block->vehicleType->elementName);
 
     }
 

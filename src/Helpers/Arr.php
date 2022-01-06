@@ -20,11 +20,11 @@ class Arr
             return $array[$key];
         }
 
-        if (strpos($key, ':') === false) {
+        if (strpos($key, '.') === false) {
             return $default;
         }
 
-        foreach (explode(':', $key) as $segment) {
+        foreach (explode('.', $key) as $segment) {
             if (is_array($array) && array_key_exists($segment, $array)) {
                 $array = $array[$segment];
             } else {
@@ -34,6 +34,7 @@ class Arr
 
         return $array;
     }
+
 
     /**
      * Checks if an item is available in an array.
@@ -50,11 +51,11 @@ class Arr
             return true;
         }
 
-        if (strpos($key, ':') === false) {
+        if (strpos($key, '.') === false) {
             return false;
         }
 
-        foreach (explode(':', $key) as $segment) {
+        foreach (explode('.', $key) as $segment) {
             if (is_array($array) && array_key_exists($segment, $array)) {
                 $array = $array[$segment];
             } else {
@@ -75,7 +76,7 @@ class Arr
      */
     public static function set(&$array, $key, $value)
     {
-        $keys = explode(':', $key);
+        $keys = explode('.', $key);
 
         while (count($keys) > 1) {
             $key = array_shift($keys);
@@ -94,4 +95,26 @@ class Arr
 
         return $array;
     }
+
+
+    public static function flatten($array, $depth = INF): array
+    {
+
+        $result = [];
+        foreach ($array as $item) {
+            if (!is_array($item)) {
+                $result[] = $item;
+            } else {
+                $values = $depth === -1
+                    ? array_values($item)
+                    : static::flatten($item, $depth - 1);
+                foreach ($values as $value) {
+                    $result[] = $value;
+                }
+            }
+        }
+        return $result;
+
+    }
+
 }

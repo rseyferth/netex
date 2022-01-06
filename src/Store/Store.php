@@ -27,4 +27,8 @@ abstract class Store
 
     abstract function getResource(string $version, string $operator, string $resource): ?array;
 
+
+
+
+
 }

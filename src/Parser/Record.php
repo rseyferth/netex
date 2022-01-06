@@ -22,6 +22,9 @@ class Record
     private $cursor;
 
 
+    private $_isResolved = false;
+
+
     public function __construct(string $name, array $attrs) {
         $this->elementName = $name;
         $this->data = $attrs;
@@ -91,7 +94,11 @@ class Record
         return $isArray ? $result : $result[0];
     }
 
-    public function resolveReferences(Store $store) : Record
+    /**
+     * @param Store $store
+     * @return static
+     */
+    public function resolveReferences(Store $store)
     {
         // Create a copy
         $copy = new self($this->elementName, []);
@@ -126,6 +133,7 @@ class Record
 
         }
 
+        $copy->_isResolved = true;
         return $copy;
 
 
@@ -198,6 +206,9 @@ class Record
     }
 
 
+    public function isResolved() {
+        return $this->_isResolved;
+    }
 
 
 }

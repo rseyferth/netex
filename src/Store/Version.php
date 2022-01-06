@@ -2,6 +2,8 @@
 
 namespace Wipkip\NeTEx\Store;
 
+use Symfony\Component\VarDumper\Cloner\Data;
+use Wipkip\NeTEx\Models\Block;
 use Wipkip\NeTEx\NeTExException;
 use Wipkip\NeTEx\Parser\Record;
 
@@ -56,6 +58,21 @@ class Version
     {
         return $this->store->getResource($this->version, $this->operator, $name);
     }
+
+
+    /**
+     * @return Block[]
+     */
+    public function blocks(): array {
+        return $this->getResource('Block');
+    }
+    /**
+     * @return DataSource[]
+     */
+    public function dataSources(): array {
+        return $this->getResource('DataSource');
+    }
+
 
     /**
      * @param $resourceName
