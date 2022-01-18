@@ -1,4 +1,4 @@
-FROM php:7.3-apache-stretch
+FROM php:8.0-apache-buster
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -17,13 +17,14 @@ RUN apt-get -y update && \
     apt-get -y --no-install-recommends install nano wget dialog && \
     apt-get -y --no-install-recommends install zlib1g-dev libzip-dev libicu-dev && \
     apt-get -y --no-install-recommends install --fix-missing apt-utils build-essential git && \
-    apt-get -y --no-install-recommends install --fix-missing libcurl3 libcurl3-dev zip openssl zsh
-
+    apt-get -y --no-install-recommends install --fix-missing curl zip openssl zsh
+RUN apt-get -y --no-install-recommends install zlib1g-dev libpng-dev libjpeg-dev libfreetype6-dev
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 
-# Other PHP7 Extensions
+# Other PHP8 Extensions
 RUN docker-php-ext-install zip
+RUN docker-php-ext-install gd
 
 # Cleanup
 RUN rm -rf /usr/src/*

@@ -8,7 +8,7 @@ use GoetasWebservices\XML\XSDReader\Schema\Element\ElementContainer;
 use GoetasWebservices\XML\XSDReader\Schema\Type\SimpleType;
 use GoetasWebservices\XML\XSDReader\Schema\Type\Type;
 use GoetasWebservices\XML\XSDReader\SchemaReader;
-use Wipkip\NeTEx\Helpers\Arr;
+use Illuminate\Support\Arr;
 
 
 class Schema

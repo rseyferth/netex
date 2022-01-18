@@ -1,8 +1,8 @@
 <?php
 
 namespace Wipkip\NeTEx\Store;
-
-use Wipkip\NeTEx\Helpers\Arr;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Wipkip\NeTEx\NeTExException;
 use Wipkip\NeTEx\Parser\Record;
 
@@ -72,30 +72,37 @@ class MemoryStore extends Store
     }
 
 
-    function getVersions(): array
+    /**
+     * @return Collection|Version[]
+     * @throws NeTExException
+     */
+    function getVersions(): Collection
     {
         // Version is the first key in the store
-        return array_map(function($key) {
-            return new Version($key, $this);
-
-        }, array_keys($this->records));
+        return collect(array_keys($this->records))
+            ->filter(function($key) {
+                return $key != 'any';
+            })
+            ->map(function($key) {
+                return new Version($key, $this);
+            });
 
     }
 
-    function getResource(string $version, string $resource, bool $resolveReferences = false): ?array
+    function getResource(string $version, string $resource, bool $resolveReferences = false): ?Collection
     {
         // Get the records
         /** @var Record[] $records */
         $key = implode('.', [$version, $resource]);
 
         $records = Arr::get($this->records, $key);
-        if ($records) $records = array_values($records);
+        if ($records) $records = collect(array_values($records));
         if (!$records || !$resolveReferences) return $records;
 
         // Get the records enriched.
-        return array_map(function($rec) {
+        return $records->map(function(Record $rec) {
             return $rec->resolveReferences($this);
-        }, $records);
+        });
 
     }
 }

@@ -4,6 +4,7 @@ services:
   app:
     container_name: netex-app
     build:
+      context: ./
       dockerfile: ./docker/app/Dockerfile
       args:
         user: netex

@@ -2,7 +2,7 @@
 
 namespace Wipkip\NeTEx\Store;
 
-use Symfony\Component\VarDumper\Cloner\Data;
+use Illuminate\Support\Collection;
 use Wipkip\NeTEx\Models\AvailabilityCondition;
 use Wipkip\NeTEx\Models\Block;
 use Wipkip\NeTEx\Models\DataSource;
@@ -73,11 +73,11 @@ class Version
 
     /**
      * @param $name
-     * @return Record[]|null
+     * @return Collection[]|Record[]|null
      */
-    public function getResource($name): ?array
+    public function getResource($name, bool $resolveReferences = false): ?Collection
     {
-        return $this->store->getResource($this->version, $name);
+        return $this->store->getResource($this->version, $name, $resolveReferences);
     }
 
 
@@ -107,144 +107,143 @@ class Version
     ///
 
     /**
-     * @return DataSource[]
+     * @return Collection|DataSource[]
      */
-    public function dataSources() : array {
-        return $this->getResource('DataSource');
+    public function dataSources(bool $resolveReferences = false) : Collection {
+        return $this->getResource('DataSource', $resolveReferences);
     }
     /**
-     * @return ResponsibilitySet[]
+     * @return Collection|ResponsibilitySet[]
      */
-    public function responsibilitySets() : array {
-        return $this->getResource('ResponsibilitySet');
+    public function responsibilitySets(bool $resolveReferences = false) : Collection {
+        return $this->getResource('ResponsibilitySet', $resolveReferences);
     }
     /**
-     * @return Operator[]
+     * @return Collection|Operator[]
      */
-    public function operators() : array {
-        return $this->getResource('Operator');
+    public function operators(bool $resolveReferences = false) : Collection {
+        return $this->getResource('Operator', $resolveReferences);
     }
     /**
-     * @return OperationalContext[]
+     * @return Collection|OperationalContext[]
      */
-    public function operationalContexts() : array {
-        return $this->getResource('OperationalContext');
+    public function operationalContexts(bool $resolveReferences = false) : Collection {
+        return $this->getResource('OperationalContext', $resolveReferences);
     }
     /**
-     * @return VehicleType[]
+     * @return Collection|VehicleType[]
      */
-    public function vehicleTypes() : array {
-        return $this->getResource('VehicleType');
+    public function vehicleTypes(bool $resolveReferences = false) : Collection {
+        return $this->getResource('VehicleType', $resolveReferences);
     }
     /**
-     * @return TransportAdministrativeZone[]
+     * @return Collection|TransportAdministrativeZone[]
      */
-    public function transportAdministrativeZones() : array {
-        return $this->getResource('TransportAdministrativeZone');
+    public function transportAdministrativeZones(bool $resolveReferences = false) : Collection {
+        return $this->getResource('TransportAdministrativeZone', $resolveReferences);
     }
     /**
-     * @return RoutePoint[]
+     * @return Collection|RoutePoint[]
      */
-    public function routePoints() : array {
-        return $this->getResource('RoutePoint');
+    public function routePoints(bool $resolveReferences = false) : Collection {
+        return $this->getResource('RoutePoint', $resolveReferences);
     }
     /**
-     * @return RouteLink[]
+     * @return Collection|RouteLink[]
      */
-    public function routeLinks() : array {
-        return $this->getResource('RouteLink');
+    public function routeLinks(bool $resolveReferences = false) : Collection {
+        return $this->getResource('RouteLink', $resolveReferences);
     }
     /**
-     * @return Route[]
+     * @return Collection|Route[]
      */
-    public function routes() : array {
-        return $this->getResource('Route');
+    public function routes(bool $resolveReferences = false) : Collection {
+        return $this->getResource('Route', $resolveReferences);
     }
     /**
-     * @return Line[]
+     * @return Collection|Line[]
      */
-    public function lines() : array {
-        return $this->getResource('Line');
+    public function lines(bool $resolveReferences = false) : Collection {
+        return $this->getResource('Line', $resolveReferences);
     }
     /**
-     * @return DestinationDisplay[]
+     * @return Collection|DestinationDisplay[]
      */
-    public function destinationDisplays() : array {
-        return $this->getResource('DestinationDisplay');
+    public function destinationDisplays(bool $resolveReferences = false) : Collection {
+        return $this->getResource('DestinationDisplay', $resolveReferences);
     }
     /**
-     * @return ScheduledStopPoint[]
+     * @return Collection|ScheduledStopPoint[]
      */
-    public function scheduledStopPoints() : array {
-        return $this->getResource('ScheduledStopPoint');
+    public function scheduledStopPoints(bool $resolveReferences = false) : Collection {
+        return $this->getResource('ScheduledStopPoint', $resolveReferences);
     }
     /**
-     * @return StopArea[]
+     * @return Collection|StopArea[]
      */
-    public function stopAreas() : array {
-        return $this->getResource('StopArea');
+    public function stopAreas(bool $resolveReferences = false) : Collection {
+        return $this->getResource('StopArea', $resolveReferences);
     }
     /**
-     * @return PassengerStopAssignment[]
+     * @return Collection|PassengerStopAssignment[]
      */
-    public function stopAssignments() : array {
-        return $this->getResource('PassengerStopAssignment');
+    public function stopAssignments(bool $resolveReferences = false) : Collection {
+        return $this->getResource('PassengerStopAssignment', $resolveReferences);
     }
     /**
-     * @return TimingLink[]
+     * @return Collection|TimingLink[]
      */
-    public function timingLinks() : array {
-        return $this->getResource('TimingLink');
+    public function timingLinks(bool $resolveReferences = false) : Collection {
+        return $this->getResource('TimingLink', $resolveReferences);
     }
     /**
-     * @return ServiceJourneyPattern[]
+     * @return Collection|ServiceJourneyPattern[]
      */
-    public function serviceJourneyPatterns() : array {
-        return $this->getResource('ServiceJourneyPattern');
+    public function serviceJourneyPatterns(bool $resolveReferences = false) : Collection {
+        return $this->getResource('ServiceJourneyPattern', $resolveReferences);
     }
     /**
-     * @return TimeDemandType[]
+     * @return Collection|TimeDemandType[]
      */
-    public function timeDemandTypes() : array {
-        return $this->getResource('TimeDemandType');
+    public function timeDemandTypes(bool $resolveReferences = false) : Collection {
+        return $this->getResource('TimeDemandType', $resolveReferences);
     }
     /**
-     * @return AvailabilityCondition[]
+     * @return Collection|AvailabilityCondition[]
      */
-    public function availabilityConditions() : array {
-        return $this->getResource('AvailabilityCondition');
+    public function availabilityConditions(bool $resolveReferences = false) : Collection {
+        return $this->getResource('AvailabilityCondition', $resolveReferences);
     }
     /**
-     * @return ServiceJourney[]
+     * @return Collection|ServiceJourney[]
      */
-    public function serviceJourneys() : array {
-        return $this->getResource('ServiceJourney');
+    public function serviceJourneys(bool $resolveReferences = false) : Collection {
+        return $this->getResource('ServiceJourney', $resolveReferences);
     }
     /**
-     * @return DeadRun[]
+     * @return Collection|DeadRun[]
      */
-    public function deadRuns() : array {
-        return $this->getResource('DeadRun');
+    public function deadRuns(bool $resolveReferences = false) : Collection {
+        return $this->getResource('DeadRun', $resolveReferences);
     }
     /**
-     * @return DayType[]
+     * @return Collection|DayType[]
      */
-    public function dayTypes() : array {
-        return $this->getResource('DayType');
+    public function dayTypes(bool $resolveReferences = false) : Collection {
+        return $this->getResource('DayType', $resolveReferences);
     }
     /**
-     * @return DayTypeAssignment[]
+     * @return Collection|DayTypeAssignment[]
      */
-    public function dayTypeAssignments() : array {
-        return $this->getResource('DayTypeAssignment');
+    public function dayTypeAssignments(bool $resolveReferences = false) : Collection {
+        return $this->getResource('DayTypeAssignment', $resolveReferences);
     }
     /**
-     * @return Block[]
+     * @return Collection|Block[]
      */
-    public function blocks() : array {
-        return $this->getResource('Block');
+    public function blocks(bool $resolveReferences = false) : Collection {
+        return $this->getResource('Block', $resolveReferences);
     }
-
 
 
 

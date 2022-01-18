@@ -2,6 +2,8 @@
 
 namespace Wipkip\NeTEx\Parser;
 
+use Illuminate\Support\Arr;
+use stdClass;
 use Wipkip\NeTEx\Store\Store;
 
 class Record
@@ -13,27 +15,28 @@ class Record
     public $elementName;
 
 
-    /**
-     * @var array
-     */
-    public $data;
-
-
     private $cursor;
 
 
     private $_isResolved = false;
 
 
-    public function __construct(string $name, array $attrs) {
+
+    /**
+     * @param string $name
+     * @param array|Record $attrs
+     */
+    public function __construct(string $name, $attrs) {
         $this->elementName = $name;
-        $this->data = $attrs;
+        foreach ($attrs as $key => $value) {
+            $this->$key = $value;
+        }
 
         $this->cursor = [];
     }
 
     public function __get(string $name) {
-        return $this->data[$name];
+        return $this->$name ?? null;
     }
 
 
@@ -50,27 +53,59 @@ class Record
         $attrs = $this->cursor[count($this->cursor) - 1][1];
 
         // Store value using first group
-        $dataKey = implode('_', array_map('lcfirst', $path));
-        if (!empty($value) || empty($attrs)) $this->data[$dataKey] = $value;
+        if (!empty($value) || empty($attrs)) $this->setPathValue($path, $value);
 
         // Store attributes
         if (!empty($attrs)) {
 
             // The ref? (e.g. <AuthorityRef ref="..." version="..." />)\
-            if (preg_match('/Ref$/', $dataKey) && array_key_exists('ref', $attrs)) {
+            if (preg_match('/Ref$/', last($path)) && array_key_exists('ref', $attrs)) {
 
                 // Store ref
-                $this->data[$dataKey] = new Reference($attrs['ref'], $attrs['version'] ?: $version);
+                $this->setPathValue($path, new Reference($attrs['ref'], Arr::get($attrs, 'version', $version)));
 
             } else {
 
                 // Store sub-values
+                $base = last($path);
                 foreach ($attrs as $key => $value) {
-                    $this->data[$dataKey . '_' . $key] = $value;
+                    array_pop($path);
+                    $path[] = $base . '_' . $key;
+                    $this->setPathValue($path, $value);
                 }
 
             }
         }
+
+    }
+
+    private function setPathValue(array $path, $value) {
+
+        // Get the obj
+        $obj = $this;
+        while (count($path) > 1) {
+            $key = array_shift($path);
+            if (!isset($obj->$key) || is_null($obj->$key)) {
+                $obj->$key = new stdClass();
+            }
+            $obj = $obj->$key;
+        }
+
+        // No object found?
+        if (!is_object($obj)) {
+
+            // Use underscores instead.
+            $this->setPathValue([implode('_', $path)], $value);
+            return;
+
+        }
+
+        // Set it
+        $key = $path[0];
+
+        // Not overwriting an object?
+        if (is_null($value) && isset($obj->$key)) return;
+        $obj->$key = $value;
 
     }
 
@@ -86,12 +121,13 @@ class Record
             $value = $ref;
             while ($value instanceof Reference) {
                 $value = $store->get($key, $value->version ?: 'any');
+                if (!$value) $value = new InvalidReference($ref->id, $ref->version ?: 'any', $ref->elementName);
                 if ($value instanceof Reference) $key = $value->id;
             }
             return $value;
         }, is_array($value) ? $value : [$value]);
 
-        return $isArray ? $result : $result[0];
+        return $isArray ? collect($result) : $result[0];
     }
 
     /**
@@ -101,15 +137,15 @@ class Record
     public function resolveReferences(Store $store)
     {
         // Create a copy
-        $copy = new self($this->elementName, []);
-        foreach ($this->data as $key => $value) {
+        $copy = new static($this->elementName, []);
+        foreach ($this as $key => $value) {
 
             // Reference or array of refs?
             if ($value instanceof Reference || (is_array($value) && count($value) > 0 && $value[0] instanceof Reference)) {
 
                 // Replace key and store the resolved value(s)
                 $key = preg_replace('/Ref(_ref)?$/', '', $key);
-                $copy->data[$key] = $this->resolveReferenceObjects($value, $store);
+                $copy->$key = $this->resolveReferenceObjects($value, $store);
 
             }
 
@@ -122,13 +158,13 @@ class Record
                     return $rec->resolveReferences($store);
                 }, is_array($value) ? $value : [$value]);
 
-                $copy->data[$key] = $isArray ? $result : $result[0];
+                $copy->$key = $isArray ? collect($result) : $result[0];
 
             }
 
             // Just a value
             else {
-                $copy->data[$key] = $value;
+                $copy->$key = $value;
             }
 
         }
@@ -146,7 +182,7 @@ class Record
 
     public function createSet($name)
     {
-        $this->data[$name] = [];
+        $this->$name = [];
     }
 
     public function addRecord($name, Record $record, string $version = 'any')
@@ -154,13 +190,13 @@ class Record
 
         // Is it just a ref?
         if (preg_match('/Ref$/', $record->elementName)
-            && array_key_exists('ref', $record->data)
+            && isset($record->ref)
             ) {
 
-            $this->data[$name][] = new Reference($record->data['ref'], $record->data['version'] ?: $version, $record->elementName);
+            $this->$name[] = new Reference($record->ref, $record->version ?? $version, $record->elementName);
 
         } else {
-            $this->data[$name][] = $record;
+            $this->$name[] = $record;
         }
     }
 
@@ -183,7 +219,7 @@ class Record
 
         $result = [];
         if ($includeElementName) $result['$'] = $this->elementName;
-        foreach ($this->data as $key => $value) {
+        foreach ($this as $key => $value) {
             if (is_array($value)) {
                 $arr = [];
                 foreach ($value as $v) {
@@ -202,7 +238,7 @@ class Record
     }
 
     public function getId() {
-        return $this->data['id'];
+        return $this->id;
     }
 
 

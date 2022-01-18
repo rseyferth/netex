@@ -2,28 +2,35 @@
 namespace Wipkip\NeTEx\Models;
 use Wipkip\NeTEx\Parser\Record;
 
-/**
- * Block model class 
- * 
- * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
+/**$
+ * Block model class
  *
- * @property-read  string  $name  
- * @property-read  string|null  $name_lang
- * @property-read  string|null  $description  
- * @property-read  string|null  $description_lang
- * @property-read  string  $privateCode  Hier altijd type="BlockCode" gebruiken
- * @property-read  string  $privateCode_type
- * @property-read  string|null  $preparationDuration  
- * @property-read  string|null  $startTime  
- * @property-read  string|null  $startTimeDayOffset  
- * @property-read  string|null  $finishingDuration  
- * @property-read  string|null  $endTime  
- * @property-read  string|null  $endTimeDayOffset  
- * @property-read  mixed|null  $dayTypes  
- * @property-read  VehicleType|null  $vehicleType  
- * @property-read  mixed|null  $startPoint  
- * @property-read  mixed|null  $endPoint  
- * @property-read  DeadRun|ServiceJourney[]|null  $journeys  
+ * This class was automatically generated based on the definitions XLSX
+ *
+ * id
+ * version
+ *
+ * @property string $name Naam van de omloop (mag gelijk zijn aan omloopnummer)
+
+ * @property string|null $description 
+ * @property string $privateCode Volledig omloopnummer (alleen numerieke waarden). Dit is in het algemeen het nummer waarmee de chauffeur/bestuurder zich op de omloop aanmeldt.
+Gebruik attribuuut type="BlockCode".
+Via de Vetag-transponder worden de laatste twee cijfers van het omloopnummer gestuurd als Vetag-dienstwagennummer. Bij Vecom worden de laatste 3 cijfers van het omloopnummer gebruikt. (o.a. t.b.v. dynamische haltetoewijzing).   
+ * @property string|null $preparationDuration 
+ * @property string|null $startTime 
+ * @property int|null $startTimeDayOffset 
+ * @property string|null $finishingDuration 
+ * @property string|null $endTime 
+ * @property int|null $endTimeDayOffset 
+ * @property mixed $validityConditions 
+ * @property DayType[]|\Illuminate\Support\Collection|null $dayTypes Definieert de geldigheid van het Block. 
+De koppeling aan concrete (operationele) dagen staat in DayTypeAssignments.
+ * @property VehicleServicePart|null $vehicleServicePart Vooralsnog weglaten, want het NL NeTEx Profiel bevat geen VehicleServiceParts om naar te verwijzen.
+ * @property VehicleType|null $vehicleType Het (gemeenschappelijke) voertuigtype van de aan het Block gekoppelde ritten. 
+De referentie verwijst naar een bestaand VehicleType element.
+ * @property Point|null $startPoint 
+ * @property Point|null $endPoint 
+ * @property Journey $journeys Zowel ServiceJourneys als DeadRuns.
  */
- 
+
 class Block extends Record {}

@@ -2,11 +2,15 @@
 
 namespace Wipkip\NeTEx\Store;
 
+use Illuminate\Support\Collection;
 use Wipkip\NeTEx\Parser\Record;
 use Wipkip\NeTEx\Parser\Reference;
 
 abstract class Store
 {
+
+    public $publicationTimestamp;
+
 
     abstract function store(Record $rec, string $version = 'any');
 
@@ -21,11 +25,11 @@ abstract class Store
 
 
     /**
-     * @return Version[]
+     * @return Collection|Version[]
      */
-    abstract function getVersions(): array;
+    abstract function getVersions(): Collection;
 
-    abstract function getResource(string $version, string $resource): ?array;
+    abstract function getResource(string $version, string $resource, bool $resolveReferences = false): ?Collection;
 
 
 

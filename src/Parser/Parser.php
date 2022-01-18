@@ -1,6 +1,6 @@
 <?php namespace Wipkip\NeTEx\Parser;
 
-use Wipkip\NeTEx\Store\SQLiteStore;
+use Closure;
 use Wipkip\NeTEx\Store\Store;
 
 class Parser
@@ -65,7 +65,7 @@ class Parser
 
 
     /**
-     * @var SQLiteStore
+     * @var Store
      */
     private $store;
 
@@ -118,6 +118,11 @@ class Parser
     }
 
 
+    /**
+     * @param Store $store
+     * @param bool|Closure $showProgressBar
+     * @return void
+     */
     public function import(Store $store, $showProgressBar = false) {
 
         // Localize
@@ -125,7 +130,7 @@ class Parser
 
         // Progress?
         $size = filesize($this->path);
-        if ($showProgressBar) fwrite(STDOUT, "Processing XML file of " . round($size / 1024 / 1024) . 'MB' . PHP_EOL);
+        if ($showProgressBar === true) fwrite(STDOUT, "Processing XML file of " . round($size / 1024 / 1024) . 'MB' . PHP_EOL);
 
         // Go through the whole tree.
         $cursor = 0;
@@ -138,9 +143,11 @@ class Parser
                     xml_get_current_line_number($this->parser)));
             }
 
-            if ($showProgressBar) {
+            if ($showProgressBar === true) {
                 fwrite(STDOUT, "\r" . str_repeat(' ', 72) . "\r");
                 fwrite(STDOUT, number_format(($cursor / $size) * 100, 1) . '%');
+            } elseif (is_callable($showProgressBar)) {
+                $showProgressBar(($cursor / $size) * 100);
             }
 
         }
@@ -166,7 +173,9 @@ class Parser
             )) {
 
             // Open a record
-            $rec = new Record($name, $attrs);
+            $recordClass = 'Wipkip\\NeTEx\\Models\\' . $name;
+            if (!class_exists($recordClass)) $recordClass = Record::class;
+            $rec = new $recordClass($name, $attrs);
             $this->currentRecords[] = $rec;
 
         }
@@ -200,7 +209,8 @@ class Parser
     private function elementContent($parser, $data) {
 
         // Set it.
-        $this->currentElementData = trim($data);
+        $str = trim($data);
+        $this->currentElementData = empty($str) ? null : $str;
 
     }
 
@@ -208,7 +218,7 @@ class Parser
 
         // Closing a record?
         $rec = $this->record();
-        $arrayName = $this->currentRecordArrays[count($this->currentRecordArrays) - 1];
+        $arrayName = count($this->currentRecordArrays) > 0 ? $this->currentRecordArrays[count($this->currentRecordArrays) - 1] : null;
 
         if ($rec && $rec->elementName == $name) {
 
@@ -238,6 +248,11 @@ class Parser
             // Pop it off.
             array_pop($this->currentRecordArrays);
 
+        }
+
+        // Publication date?
+        elseif ($name == 'PublicationTimestamp' && count($this->cursor) == 2) {
+            $this->store->publicationTimestamp = $this->currentElementData;
         }
 
         // One level down.

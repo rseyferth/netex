@@ -4,11 +4,13 @@
 // Composer
 require __DIR__ . '/vendor/autoload.php';
 
+ini_set('memory_limit', '1024M');
+
 // Truncate
 $path = __DIR__ . '/src/Models';
 $existing = glob($path . '/*.php');
 foreach ($existing as $file) unlink($file);
 
-// Open XSD
-$netex = new \Wipkip\NeTEx\Reflection\Schema(__DIR__ . '/docs/xsd/netex-nl-geen-constraints.xsd');
-$netex->generateModelClasses($path);
+// Parse XLSX
+$definitions = new \Wipkip\NeTEx\Reflection\Definitions(__DIR__ . '/docs/nl_netex_profiel_-_definities_v9.2.2_release_0.xlsx');
+$definitions->generateModelClasses($path);

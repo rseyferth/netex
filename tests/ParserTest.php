@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\TestCase;
+use Wipkip\NeTEx\Models\Block;
+use Wipkip\NeTEx\Models\VehicleType;
 use Wipkip\NeTEx\Parser\Record;
 use Wipkip\NeTEx\Store\MemoryStore;
 use Wipkip\NeTEx\Store\SQLiteStore;
@@ -33,15 +36,15 @@ class ParserTest extends TestCase
         $version = '_2021-03-01';
         $rec = $store->get($id, $version,true);
 
-        $this->assertInstanceOf(Record::class, $rec, 'Could not retrieve record ' . $id);
+        $this->assertInstanceOf(Block::class, $rec, 'Could not retrieve record ' . $id);
         $this->assertEquals('Block', $rec->elementName);
         $this->assertEquals($id, $rec->getId());
 
         // Make sure references are resolved
-        $this->assertInstanceOf(Record::class, $rec->vehicleType, 'The vehicleType reference was not properly resolved');
+        $this->assertInstanceOf(VehicleType::class, $rec->vehicleType, 'The vehicleType reference was not properly resolved');
         $this->assertEquals('VehicleType', $rec->vehicleType->elementName);
 
-        $this->assertIsArray($rec->journeys);
+        $this->assertInstanceOf(Collection::class, $rec->journeys);
         $this->assertCount(27, $rec->journeys);
         $this->assertInstanceOf(Record::class, $rec->journeys[0]);
         $this->assertEquals('DeadRun', $rec->journeys[0]->elementName);
@@ -52,7 +55,7 @@ class ParserTest extends TestCase
         $this->assertEquals('ServiceJourney', $journey->elementName);
 
         $this->assertInstanceOf(Record::class, $journey->serviceJourneyPattern);
-        $this->assertIsArray($journey->serviceJourneyPattern->pointsInSequence);
+        $this->assertInstanceOf(Collection::class, $journey->serviceJourneyPattern->pointsInSequence);
         $this->assertCount(7, $journey->serviceJourneyPattern->pointsInSequence);
 
         /** @var Record $point */
@@ -70,10 +73,11 @@ class ParserTest extends TestCase
 
         $versions = $store->getVersions();
         $this->assertCount(1, $versions);
+        $this->assertInstanceOf(Collection::class, $versions);
         $version = $versions[0];
 
         $blocks = $version->blocks();
-        $this->assertIsArray($blocks);
+        $this->assertInstanceOf(Collection::class, $blocks);
         $this->assertCount(120, $blocks);
 
         $block = $blocks[0];

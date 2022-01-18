@@ -2,21 +2,25 @@
 namespace Wipkip\NeTEx\Models;
 use Wipkip\NeTEx\Parser\Record;
 
-/**
- * ScheduledStopPoint model class 
- * 
- * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
+/**$
+ * ScheduledStopPoint model class
  *
- * @property-read  string  $name  
- * @property-read  string|null  $name_lang
- * @property-read  string  $location  
- * @property-read  PointProjection[]  $projections  
- * @property-read  mixed|null  $stopAreas  
- * @property-read  mixed|null  $tariffZones  
- * @property-read  string|null  $privateCode  Hier altijd type="UserStopCode" gebruiken. Verplicht behalve bij flexhaltes.
- * @property-read  string  $privateCode_type
- * @property-read  string  $forAlighting  
- * @property-read  string  $forBoarding  
+ * This class was automatically generated based on the definitions XLSX
+ *
+ * De logische halte is m.b.v. een projection gerelateerd aan een RoutePoint op de geografische beschrijving van de route.
+ * De koppeling met de Quay of StopPlace in het CHB is vastgelegd in een PassengerStopAssignment. 
+ * id
+ * version
+ *
+ * @property string $name 
+ * @property Location $location De coördinaten in het Rijksdriehoeksstelstel  - zie uitwerking hieronder
+ * @property PointProjection $projections Koppeling aan een punt op de geografische route  - zie uitwerking hieronder
+ * @property StopArea|null $stopAreas (optioneel) Bundeling van haltes   - zie uitwerking hieronder
+ * @property TariffZone[]|\Illuminate\Support\Collection $tariffZones Tot welke zone(s) de halte behoort  - zie uitwerking hieronder
+ * @property string $privateCode Referentie naar de ‘UserStopCode’ van KV1.
+Gebruik hierbij altijd type=”UserStopCode”.
+ * @property bool $forAlighting Geeft aan of de halte in principe als uitstaphalte kan worden gebruikt. Dit kan evt. overruled worden per ServiceJourneyPattern. De defaultwaarde is ‘true’.
+ * @property bool $forBoarding Geeft aan of de halte in principe als instaphalte kan worden gebruikt. Dit kan evt. overruled worden per ServiceJourneyPattern. De defaultwaarde is ‘true’.
  */
- 
+
 class ScheduledStopPoint extends Record {}

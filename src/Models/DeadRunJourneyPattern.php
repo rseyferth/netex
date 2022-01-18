@@ -2,14 +2,16 @@
 namespace Wipkip\NeTEx\Models;
 use Wipkip\NeTEx\Parser\Record;
 
-/**
- * DeadRunJourneyPattern model class 
- * 
- * This class was automatically generated based on the XSD 'netex-nl-geen-constraints.xsd'
+/**$
+ * DeadRunJourneyPattern model class
  *
- * @property-read  string|null  $name  
- * @property-read  string|null  $name_lang
- * @property-read  mixed  $pointsInSequence  
+ * This class was automatically generated based on the definitions XLSX
+ *
+ * id
+ * version
+ *
+ * @property string|null $name 
+ * @property StopPointInJourneyPattern $pointsInSequence De haltes en andere logische punten (op volgorde)  - zie uitwerking hieronder
  */
- 
+
 class DeadRunJourneyPattern extends Record {}
