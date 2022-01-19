@@ -14,8 +14,8 @@ use Wipkip\NeTEx\Parser\Record;
  *
  * @property string $name 
  * @property Location $location De coördinaten in het Rijksdriehoeksstelstel  - zie uitwerking hieronder
- * @property PointProjection $projections Koppeling aan een punt op de geografische route  - zie uitwerking hieronder
- * @property StopArea|null $stopAreas (optioneel) Bundeling van haltes   - zie uitwerking hieronder
+ * @property PointProjection[]|\Illuminate\Support\Collection $projections Koppeling aan een punt op de geografische route  - zie uitwerking hieronder
+ * @property StopArea[]|\Illuminate\Support\Collection|null $stopAreas (optioneel) Bundeling van haltes   - zie uitwerking hieronder
  * @property TariffZone[]|\Illuminate\Support\Collection $tariffZones Tot welke zone(s) de halte behoort  - zie uitwerking hieronder
  * @property string $privateCode Referentie naar de ‘UserStopCode’ van KV1.
 Gebruik hierbij altijd type=”UserStopCode”.

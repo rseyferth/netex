@@ -11,7 +11,7 @@ use Wipkip\NeTEx\Parser\Record;
  * version
  *
  * @property string|null $name 
- * @property StopPointInJourneyPattern $pointsInSequence De haltes en andere logische punten (op volgorde)  - zie uitwerking hieronder
+ * @property StopPointInJourneyPattern[]|\Illuminate\Support\Collection $pointsInSequence De haltes en andere logische punten (op volgorde)  - zie uitwerking hieronder
  */
 
 class DeadRunJourneyPattern extends Record {}

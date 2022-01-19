@@ -185,7 +185,8 @@ class Definitions
         'Vehicle/Operator' => 'Operator',
         'Vehicle/VehicleType' => 'VehicleType',
 
-        'Line/TransportSubmode' => 'OperationalContext/TransportSubmode'
+        'Line/TransportSubmode' => 'OperationalContext/TransportSubmode',
+
 
 
 
@@ -193,6 +194,11 @@ class Definitions
 
     private function mapType(?string $str, array $prop, string $modelName, string $outputPath)
     {
+
+        // PointRef?
+        if ($str == 'PointRef') return 'RoutePoint';
+        if ($str == 'JourneyPatternRef') return 'ServiceJourneyPattern';
+        if ($str == 'TimingPointRef') return 'ScheduledStopPoint';
 
         // A Ref?
         if (preg_match('/Ref$/', $str)) return preg_replace('/Ref$/', '', $str);
@@ -211,7 +217,7 @@ class Definitions
             if (preg_match('/^[a-z]/', $name)) {
 
                 // Use type of first prop
-                $isArray = preg_match('/:\*$/', $subProps[0]['cardinality']);
+                $isArray = true; // preg_match('/:\*$/', $subProps[0]['cardinality']);
                 return $this->mapType($subProps[0]['type'], $sub['props'][0], $path, $outputPath) . ($isArray ? '[]|\\Illuminate\\Support\\Collection' : '');
 
             } else {
@@ -320,7 +326,7 @@ EOF;
         // Add property
         foreach ($props as $prop) {
             $type = $this->mapType($prop['type'], $prop, $modelName, $outputPath) . ($prop['isNullable'] ? '|null' : '');
-            $doc .= ' * @property ' . $type . ' $' . Str::camel($prop['name']) . ' ' . $prop['description'] . PHP_EOL;
+            $doc .= ' * @property ' . $type . ' $' . preg_replace('/:/', '_', Str::camel($prop['name'])) . ' ' . $prop['description'] . PHP_EOL;
         }
 
 

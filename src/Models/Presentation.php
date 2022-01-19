@@ -13,7 +13,7 @@ use Wipkip\NeTEx\Parser\Record;
 Bijvoorbeeld: "0092D4"
  * @property string|null $textColour Tekstkleur (hexadecimale RRGGBB-code: 6 cijfers en/of hoofdletters).
 Bijvoorbeeld: "0092D4"
- * @property string|null $infoLinks Logo van het lijstelement  - zie uitwerking hieronder
+ * @property string[]|\Illuminate\Support\Collection|null $infoLinks Logo van het lijstelement  - zie uitwerking hieronder
  */
 
 class Presentation extends Record {}

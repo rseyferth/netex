@@ -11,7 +11,7 @@ use Wipkip\NeTEx\Parser\Record;
  * id
  * version
  *
- * @property KeyValue|null $keyList Container voor 'DataOwnerIsOperator' uit KV1  - zie uitwerking hieronder
+ * @property KeyValue[]|\Illuminate\Support\Collection|null $keyList Container voor 'DataOwnerIsOperator' uit KV1  - zie uitwerking hieronder
  * @property AvailabilityCondition[]|\Illuminate\Support\Collection|null $validityConditions Wanneer de rit geldig is  - zie uitwerking hieronder
 Verplicht voor alle gepubliceerde ritten (Print='true').
  * @property string $privateCode Referentie naar het ‘JourneyNumber’ in de KV.
@@ -24,7 +24,7 @@ Waarde=1: de vertrektijd is ná 24:00 uur van de operationele dag, dus op de vol
 Waarde=-1: de rit start vóór 00:00 uur van de operationele dag, dus op de vorige kalenderdag. 
 De defaultwaarde is 0.
  * @property DayType[]|\Illuminate\Support\Collection|null $dayTypes Wordt hier gebruikt om aan te geven op welke dagsoorten (met name dagen van de week) de rit rijdt
- * @property JourneyPattern $serviceJourneyPattern Het ritpatroon.
+ * @property ServiceJourneyPattern $serviceJourneyPattern Het ritpatroon.
  * @property TimeDemandType $timeDemandType De rijtijdgroep.
  * @property VehicleType|null $vehicleType Het voertuigtype.
 Een hier gedefinieerde waarde overschrijft het evt. voertuigtype in Block. 

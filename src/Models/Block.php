@@ -28,8 +28,8 @@ De koppeling aan concrete (operationele) dagen staat in DayTypeAssignments.
  * @property VehicleServicePart|null $vehicleServicePart Vooralsnog weglaten, want het NL NeTEx Profiel bevat geen VehicleServiceParts om naar te verwijzen.
  * @property VehicleType|null $vehicleType Het (gemeenschappelijke) voertuigtype van de aan het Block gekoppelde ritten. 
 De referentie verwijst naar een bestaand VehicleType element.
- * @property Point|null $startPoint 
- * @property Point|null $endPoint 
+ * @property RoutePoint|null $startPoint 
+ * @property RoutePoint|null $endPoint 
  * @property Journey $journeys Zowel ServiceJourneys als DeadRuns.
  */
 

@@ -10,7 +10,7 @@ use Wipkip\NeTEx\Parser\Record;
  * version
  *
  * @property string $id Technische identificatie
- * @property Point $projectToPoint Routepunt waaraan de logische halte is gekoppeld.
+ * @property RoutePoint $projectToPoint Routepunt waaraan de logische halte is gekoppeld.
 Gebruik hierbij altijd nameOfRefClass="RoutePoint".
 Bijvoorbeeld:  <ProjectToPointRef nameOfRefClass="RoutePoint"
                                                        ref="CXX:RoutePoint:36002156"/>

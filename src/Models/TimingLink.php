@@ -13,8 +13,8 @@ use Wipkip\NeTEx\Parser\Record;
  *
  * @property float $distance De afstand over de weg in meters.
 Is in beginsel gelijk aan de Distance van de bijbehorende RouteLink.
- * @property TimingPoint $fromPoint De halte (of ander logisch punt) aan het begin van de verbinding.
- * @property TimingPoint $toPoint De halte (of ander logisch punt)  aan het einde van de verbinding.
+ * @property ScheduledStopPoint $fromPoint De halte (of ander logisch punt) aan het begin van de verbinding.
+ * @property ScheduledStopPoint $toPoint De halte (of ander logisch punt)  aan het einde van de verbinding.
  * @property OperationalContext|null $operationalContext Het is mogelijk per modaliteit een aparte verbinding te definiëren, bijvoorbeeld in het geval van aparte bus- en trambanen.
  */
 

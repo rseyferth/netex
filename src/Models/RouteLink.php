@@ -12,7 +12,7 @@ use Wipkip\NeTEx\Parser\Record;
  * responsibilitySetRef
  *
  * @property float $distance De totale lengte van de verbinding in meters.
- * @property string $gml:LineString Het geografische pad van het OV-voertuig tussen twee RoutePoints in de GML-notatie: een lijst met setjes RD-coördinaten (x y) voor de relevante kruispunten en/of buigpunten, alles gescheiden door spaties.
+ * @property string $gml_LineString Het geografische pad van het OV-voertuig tussen twee RoutePoints in de GML-notatie: een lijst met setjes RD-coördinaten (x y) voor de relevante kruispunten en/of buigpunten, alles gescheiden door spaties.
 Bijvoorbeeld:
   <gml:posList>111420 516916 111565 516840 111723 516503</gml:posList>
  * @property PointOnLink[]|\Illuminate\Support\Collection|null $passingThrough Extra logische punten die onderweg gepasseerd worden - zie uitwerking hieronder

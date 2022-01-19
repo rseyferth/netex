@@ -21,7 +21,7 @@ Waarde=1: de vertrektijd is ná 24:00 uur van de operationele dag, dus op de vol
 Waarde=-1: de rit start vóór 00:00 uur van de operationele dag, dus op de vorige kalenderdag. 
 De defaultwaarde is 0.
  * @property DayType[]|\Illuminate\Support\Collection|null $dayTypes De dagsoorten waarvoor de rit bedoeld is  - zie uitwerking hieronder
- * @property JourneyPattern $deadRunJourneyPattern Het ritpatroon.
+ * @property ServiceJourneyPattern $deadRunJourneyPattern Het ritpatroon.
  * @property TimeDemandType $timeDemandType De rijtijdgroep.
  * @property VehicleType|null $vehicleType Het voertuigtype.
 Een hier gedefinieerde waarde overschrijft het evt. voertuigtype in Block. 

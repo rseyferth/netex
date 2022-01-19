@@ -12,7 +12,7 @@ use Wipkip\NeTEx\Parser\Record;
  * Kies één van de volgende twee verwijzingen:
  *
  * @property ScheduledStopPoint $scheduledStopPoint De bijbehorende halte.
- * @property TimingPoint $timingPoint Het bijbehorende (extra) logische punt.
+ * @property ScheduledStopPoint $timingPoint Het bijbehorende (extra) logische punt.
  * @property string $waitTime De halteringstijd op een halte, als er een aparte aankomst- en vertrektijd is. 
 Notatie: “PT…M” voor minuten, “PT…S” voor seconden. 
 Bijvoorbeeld:  <WaitTime>PT5M</WaitTime>

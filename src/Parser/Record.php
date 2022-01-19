@@ -81,6 +81,11 @@ class Record
 
     private function setPathValue(array $path, $value) {
 
+        // Fix path
+        $path = array_map(function($p) {
+            return preg_replace('/:/', '_' ,$p);
+        }, $path);
+
         // Get the obj
         $obj = $this;
         while (count($path) > 1) {
@@ -102,6 +107,8 @@ class Record
 
         // Set it
         $key = $path[0];
+
+
 
         // Not overwriting an object?
         if (is_null($value) && isset($obj->$key)) return;

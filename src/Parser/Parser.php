@@ -209,8 +209,7 @@ class Parser
     private function elementContent($parser, $data) {
 
         // Set it.
-        $str = trim($data);
-        $this->currentElementData = empty($str) ? null : $str;
+        $this->currentElementData .= $data;
 
     }
 
@@ -219,6 +218,10 @@ class Parser
         // Closing a record?
         $rec = $this->record();
         $arrayName = count($this->currentRecordArrays) > 0 ? $this->currentRecordArrays[count($this->currentRecordArrays) - 1] : null;
+
+        // Prepare element-content
+        $elData = trim($this->currentElementData);
+        if (empty($elData)) $elData = null;
 
         if ($rec && $rec->elementName == $name) {
 
@@ -252,7 +255,7 @@ class Parser
 
         // Publication date?
         elseif ($name == 'PublicationTimestamp' && count($this->cursor) == 2) {
-            $this->store->publicationTimestamp = $this->currentElementData;
+            $this->store->publicationTimestamp = $elData;
         }
 
         // One level down.
@@ -262,11 +265,13 @@ class Parser
         if ($rec) {
 
             // Set it
-            $rec->setValue($this->currentElementData, $this->currentFrameVersion);
+            $rec->setValue($elData, $this->currentFrameVersion);
 
             // Close the element
             $rec->popCursor();
+
         }
+        $this->currentElementData = '';
 
     }
 

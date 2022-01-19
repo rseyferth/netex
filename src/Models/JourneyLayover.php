@@ -17,7 +17,7 @@ Notatie: “PT…M” voor minuten, “PT…S” voor seconden.
 Bijvoorbeeld:  <Layover>PT2M</Layover>
 In het NL NeTEx Profiel hoeft dit niet alleen 'aan het einde van de rit' te zijn.
  * @property ScheduledStopPoint $scheduledStopPoint De bijbehorende halte.
- * @property TimingPoint $timingPoint Het bijbehorende (extra) logische punt.
+ * @property ScheduledStopPoint $timingPoint Het bijbehorende (extra) logische punt.
  */
 
 class JourneyLayover extends Record {}

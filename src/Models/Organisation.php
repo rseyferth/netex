@@ -16,7 +16,7 @@ use Wipkip\NeTEx\Parser\Record;
  * @property string $shortName Afkorting van de Name, die bijvoorbeeld ook past in een bestandsnaam.
  * @property string|null $description Een korte beschrijving van de organisatie.
 Dit is vooral handig voor de leesbaarheid en het begrip van de gegevens.
- * @property TypeOfOrganisation $typesOfOrganisation Het type organisatie  - zie uitwerking hieronder
+ * @property TypeOfOrganisation[]|\Illuminate\Support\Collection $typesOfOrganisation Het type organisatie  - zie uitwerking hieronder
  */
 
 class Organisation extends Record {}

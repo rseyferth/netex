@@ -9,7 +9,7 @@ use Wipkip\NeTEx\Parser\Record;
  *
  * 
  *
- * @property string $gml:pos De geografische locatie in het Rijksdriehoekstelsel (RD) in de GML-notatie: eerst de x-coördinaat, vervolgens een spatie en dan de y-coördinaat.
+ * @property string $gml_pos De geografische locatie in het Rijksdriehoekstelsel (RD) in de GML-notatie: eerst de x-coördinaat, vervolgens een spatie en dan de y-coördinaat.
 Bijvoorbeeld:  <gml:pos>111770 516760</gml:pos>
  */
 
