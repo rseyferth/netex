@@ -16,7 +16,7 @@ use Wipkip\NeTEx\Parser\Record;
 Aan deze waarden moet géén inhoudelijke interpretatie gegeven worden anders dan dat gelijke waarden impliceren dat het om dezelfde richting gaat.
  * @property DestinationDisplay $destinationDisplay De (default)bestemming voor de hele rit.
 Kan worden overruled op halteniveau, bijvoorbeeld wanneer halverwege de rit een andere bestemming getoond moet worden.
- * @property StopPointInJourneyPattern[]|\Illuminate\Support\Collection $pointsInSequence De haltes en andere logische punten (op volgorde)  - zie uitwerking hieronder
+ * @property TimingPointInJourneyPattern[]|StopPointInJourneyPattern[]|\Illuminate\Support\Collection $pointsInSequence De haltes en andere logische punten (op volgorde)  - zie uitwerking hieronder
  */
 
 class ServiceJourneyPattern extends Record {}

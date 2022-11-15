@@ -94,8 +94,8 @@ class MemoryStore extends Store
         // Get the records
         /** @var Record[] $records */
         $key = implode('.', [$version, $resource]);
-
         $records = Arr::get($this->records, $key);
+
         if ($records) $records = collect(array_values($records));
         if (!$records || !$resolveReferences) return $records;
 
@@ -104,5 +104,11 @@ class MemoryStore extends Store
             return $rec->resolveReferences($this);
         });
 
+    }
+
+    function destroy(): void
+    {
+        $this->records = [];
+        $this->refs = [];
     }
 }

@@ -4,6 +4,7 @@ namespace Wipkip\NeTEx\Parser;
 
 use Illuminate\Support\Arr;
 use stdClass;
+use Wipkip\NeTEx\NeTExException;
 use Wipkip\NeTEx\Store\Store;
 
 class Record
@@ -20,6 +21,8 @@ class Record
 
     private $_isResolved = false;
 
+
+    protected array $casts = [];
 
 
     /**
@@ -38,6 +41,28 @@ class Record
     public function __get(string $name) {
         return $this->$name ?? null;
     }
+
+    public function __set(string $name, $value) {
+        // Cast?
+        $cast = Arr::get($this->casts, $name);
+        if ($cast) {
+
+            switch ($cast) {
+
+                case 'bool':
+                case 'boolean':
+                    $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                    break;
+
+                default:
+                    throw new NeTExException('Invalid cast setting for ' . $name . ' in ' . static::class . ': ' . $cast);
+
+            }
+
+        }
+        $this->$name = $value;
+    }
+
 
 
     public function setValue(?string $value, string $version = 'any')
@@ -141,14 +166,14 @@ class Record
      * @param Store $store
      * @return static
      */
-    public function resolveReferences(Store $store)
+    public function resolveReferences(Store $store): static
     {
         // Create a copy
         $copy = new static($this->elementName, []);
         foreach ($this as $key => $value) {
 
             // Reference or array of refs?
-            if ($value instanceof Reference || (is_array($value) && count($value) > 0 && $value[0] instanceof Reference)) {
+            if ($value instanceof Reference || (is_array($value) && Arr::first($value) instanceof Reference)) {
 
                 // Replace key and store the resolved value(s)
                 $key = preg_replace('/Ref(_ref)?$/', '', $key);
@@ -157,7 +182,7 @@ class Record
             }
 
             // Nested record(s)?
-            elseif ($value instanceof Record || (is_array($value) && count($value) > 0 && $value[0] instanceof Record)) {
+            elseif ($value instanceof Record || (is_array($value) && Arr::first($value) instanceof Record)) {
 
                 // Resolve them too
                 $isArray = is_array($value);
@@ -244,7 +269,7 @@ class Record
         return $result;
     }
 
-    public function getId() {
+    public function getId(): string {
         return $this->id;
     }
 

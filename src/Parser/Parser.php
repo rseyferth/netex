@@ -22,7 +22,7 @@ class Parser
 
         'Line', 'DestinationDisplay', 'ScheduledStopPoint', 'StopArea', 'PassengerStopAssignment',
 
-        'TimingLink', 'ServiceJourneyPattern', 'TimeDemandType',
+        'TimingPoint', 'TimingLink', 'ServiceJourneyPattern', 'TimeDemandType',
 
         'Notice', 'NoticeAssignment',
 
@@ -223,8 +223,8 @@ class Parser
         $elData = trim($this->currentElementData);
         if (empty($elData)) $elData = null;
 
-        if ($rec && $rec->elementName == $name) {
 
+        if ($rec && $rec->elementName == $name) {
             // Inside an array?
             if (!empty($this->currentRecordArrays)) {
 

@@ -33,6 +33,10 @@ abstract class Store
 
 
 
+    abstract function destroy(): void;
+
+
+
 
 
 }

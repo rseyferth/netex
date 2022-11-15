@@ -2,7 +2,8 @@
 namespace Wipkip\NeTEx\Models;
 use Wipkip\NeTEx\Parser\Record;
 
-/**$
+/**
+ * @class ServiceJourney
  * ServiceJourney model class
  *
  * This class was automatically generated based on the definitions XLSX
@@ -33,8 +34,7 @@ Deze waarde overschrijft de operator in OperatorView, bijvoorbeeld als de rit is
  * @property bool|null $print Geeft aan of de niet expliciet geplande rit getoond moet worden in gedrukte media. 
 Default is ‘true’. 
 Van alle ServiceJourneys waarvoor deze waarde 'true' is, moet de geldigheid in de AvailabilityCondition zijn vastgelegd.
- * @property string|null $dynamic Geeft aan of de niet expliciet geplande rit getoond moet worden op displays. 
+ * @property string|null $dynamic Geeft aan of de niet expliciet geplande rit getoond moet worden op displays.
 Mogelijke waarden: ‘always’ (default), ‘never’, ‘onlyIfOrdered’ en ‘onlyIfSignedOn’.
  */
-
 class ServiceJourney extends Record {}

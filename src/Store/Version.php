@@ -3,6 +3,7 @@
 namespace Wipkip\NeTEx\Store;
 
 use Illuminate\Support\Collection;
+use Wipkip\NeTEx\Enums\VersionType;
 use Wipkip\NeTEx\Models\AvailabilityCondition;
 use Wipkip\NeTEx\Models\Block;
 use Wipkip\NeTEx\Models\DataSource;
@@ -24,6 +25,7 @@ use Wipkip\NeTEx\Models\ServiceJourneyPattern;
 use Wipkip\NeTEx\Models\StopArea;
 use Wipkip\NeTEx\Models\TimeDemandType;
 use Wipkip\NeTEx\Models\TimingLink;
+use Wipkip\NeTEx\Models\TimingPoint;
 use Wipkip\NeTEx\Models\TransportAdministrativeZone;
 use Wipkip\NeTEx\Models\VehicleType;
 use Wipkip\NeTEx\NeTExException;
@@ -42,9 +44,9 @@ class Version
     private $store;
 
 
-    public $startDate;
-    public $endDate;
-    public $versionType;
+    public string $startDate;
+    public string $endDate;
+    public string $versionType;
 
     /**
      * @var string
@@ -64,9 +66,6 @@ class Version
         $this->startDate = substr($rec->startDate, 0, 10);
         $this->endDate = substr($rec->endDate, 0, 10);
         $this->versionType = $rec->versionType;
-
-        // Not right?
-        if ($this->versionType !== 'baseline') throw new NeTExException('Only "baseline" versions are supported in the current implementation. Given type: ' . $this->versionType);
 
     }
 
@@ -196,6 +195,14 @@ class Version
     public function timingLinks(bool $resolveReferences = false) : Collection {
         return $this->getResource('TimingLink', $resolveReferences);
     }
+    
+    /**
+     * @return Collection|TimingPoint[]
+     */
+    public function timingPoints(bool $resolveReferences = false) : Collection {
+        return $this->getResource('TimingPoint', $resolveReferences);
+    }
+    
     /**
      * @return Collection|ServiceJourneyPattern[]
      */

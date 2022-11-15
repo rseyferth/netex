@@ -1,5 +1,7 @@
 <?php
 namespace Wipkip\NeTEx\Models;
+use Illuminate\Support\Arr;
+use Wipkip\NeTEx\Parser\InvalidReference;
 use Wipkip\NeTEx\Parser\Record;
 
 /**$
@@ -23,4 +25,22 @@ Gebruik hierbij altijd type=”UserStopCode”.
  * @property bool $forBoarding Geeft aan of de halte in principe als instaphalte kan worden gebruikt. Dit kan evt. overruled worden per ServiceJourneyPattern. De defaultwaarde is ‘true’.
  */
 
-class ScheduledStopPoint extends Record {}
+class ScheduledStopPoint extends Record {
+
+    protected array $casts = [
+        'forAlighting' => 'bool',
+        'forBoarding' => 'bool',
+    ];
+
+
+
+    public function getZoneCodes(): array {
+
+        // A bit hacky, but we'll use the zone-id at the end of the reference (DOVA:TariffZone:1234)
+        return $this->tariffZones->map(function (InvalidReference $ref) {
+            return Arr::last(explode(':', $ref->id));
+        })->toArray();
+    }
+
+
+}

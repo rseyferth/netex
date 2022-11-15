@@ -34,4 +34,20 @@ De mogelijke waarden zijn door BISON in een centrale lijst vastgelegd.
  * @property AccessibilityAssessment $accessibilityAssessment Toegankelijkheidsinformatie  - zie uitwerking hieronder
  */
 
-class Line extends Record {}
+class Line extends Record {
+
+    public function getTransportType() : string {
+        switch ($this->transportMode) {
+
+            case 'rail':
+                return 'Train';
+
+            case 'water':
+                return 'Boat';
+
+            default:
+                return ucfirst($this->transportMode);
+        }
+    }
+
+}

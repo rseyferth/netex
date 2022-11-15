@@ -9,7 +9,7 @@ use Wipkip\NeTEx\Parser\Record;
  *
  * id
  * version
- * order
+ * @property string order
  *
  * @property ScheduledStopPoint $scheduledStopPoint De logische halte in de dienstregeling.
  * @property TimingLink|null $onwardTimingLink De verbinding naar de volgende halte (of ander logisch punt) in het ritpatroon.
@@ -24,6 +24,15 @@ Voor een eindhalte geldt veelal ForBoarding="false".
 Indien ingevuld vervangt deze de waarde in ScheduledStopPoint. 
  * @property DestinationDisplay|null $destinationDisplay De bestemming van de rit die bij deze halte getoond moet worden.
 Hiermee wordt de waarde op ritniveau overruled.
+
  */
 
-class StopPointInJourneyPattern extends Record {}
+class StopPointInJourneyPattern extends Record {
+
+    protected array $casts = [
+        'isWaitPoint' => 'bool',
+        'forAlighting' => 'bool',
+        'forBoarding' => 'bool',
+    ];
+
+}
