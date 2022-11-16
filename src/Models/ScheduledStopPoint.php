@@ -37,9 +37,9 @@ class ScheduledStopPoint extends Record {
     public function getZoneCodes(): array {
 
         // A bit hacky, but we'll use the zone-id at the end of the reference (DOVA:TariffZone:1234)
-        return $this->tariffZones->map(function (InvalidReference $ref) {
+        return $this->tariffZones ? $this->tariffZones->map(function (InvalidReference $ref) {
             return Arr::last(explode(':', $ref->id));
-        })->toArray();
+        })->toArray() : [];
     }
 
 
